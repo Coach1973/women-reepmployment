@@ -228,6 +228,22 @@ input[type=range]{width:100%;accent-color:var(--rose);height:40px}
 .fcard p{font-size:20px;color:var(--muted);line-height:1.5}
 .fcard .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
 .fcard .acts a{font-size:20px;padding:10px 16px;flex:1}
+.region-pick{margin-top:30px;background:var(--cream);border:2px solid var(--line);border-radius:26px;padding:24px 26px}
+.region-pick h3{font-size:26px;margin-bottom:14px}
+.rp-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.rp-btns button{border:3px solid var(--line);background:var(--card);border-radius:20px;padding:18px 16px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:6px;font-family:inherit;font-size:20px;color:inherit;min-height:96px}
+.rp-btns button b{font-size:26px;line-height:1.3}
+.rp-btns button span{font-size:20px;color:var(--muted);line-height:1.4}
+.rp-btns button:hover{border-color:var(--rose)}
+.rp-btns button.on{border-color:var(--rose);background:var(--rose);color:#fff}
+.rp-btns button.on span{color:#fff}
+.rp-county{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:18px;font-size:20px;font-weight:700}
+.rp-county select{font-family:inherit;font-size:20px;padding:10px 14px;border-radius:12px;border:2px solid var(--line);background:var(--card);color:inherit;min-height:48px}
+.rp-hint{margin:14px 0 0;font-size:20px;color:var(--muted);line-height:1.6}
+.rp-hint b{color:var(--rose)}
+#formArea[hidden]{display:none}
+.pack-all{display:inline-block;margin-top:6px;font-size:20px;font-weight:700}
+@media (max-width:760px){.rp-btns{grid-template-columns:1fr}}
 .pack{margin-top:34px;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;background:var(--sun-l);border-radius:26px;padding:24px 30px}
 .cleanup{margin-top:24px;font-size:20px;color:var(--muted)}
 .cleanup summary{cursor:pointer;font-weight:700;color:var(--ink)}
@@ -570,24 +586,37 @@ footer a{color:var(--sun)}
   <div class="wrap">
     <span class="kicker">📂 表單下載</span>
     <h2>表格全部在這，有範本照著寫</h2>
-    <p class="lead">全部整理成直式 A4，可直接列印。先看「填寫範本」，再下載「空白表單」。<b>其實不用自己填，留資料我們幫你。</b></p>
-    <div class="tabs" id="formTabs">
-      <button type="button" class="on" data-f="all">全部</button>
-      <button type="button" data-f="blank">空白表單</button>
-      <button type="button" data-f="sample">填寫範本</button>
+    <p class="lead">三個地區的表格不一樣。<b>先選你住的地方</b>，我們只給你那一區用得到的表格；範本照著寫最快。<b>其實不用自己填，留資料我們幫你。</b></p>
+    <div class="region-pick" id="regionPick">
+      <h3>① 你住在哪裡？</h3>
+      <div class="rp-btns" role="group" aria-label="選擇所在地">
+        <button type="button" data-r="nm" aria-pressed="false"><b>北中南</b><span>北基宜花金馬、中彰投、雲嘉南</span></button>
+        <button type="button" data-r="ks" aria-pressed="false"><b>高雄・屏東・澎湖・台東</b><span>高屏澎東分署</span></button>
+        <button type="button" data-r="tcm" aria-pressed="false"><b>桃竹苗</b><span>桃園、新竹、苗栗</span></button>
+      </div>
+      <label class="rp-county" for="rpCounty">不確定？直接選你的縣市：<select id="rpCounty"><option value="">請選擇縣市</option></select></label>
+      <p class="rp-hint" id="rpHint" aria-live="polite">選好之後，下面才會出現你那一區的表格。</p>
     </div>
-    <div class="form-grid" id="formGrid"></div>
-    <div class="pack">
-      <div><b style="font-size:26px">📦 一次全部下載</b><br><span style="color:var(--muted)">8 份 PDF（空白 5 份＋範本 3 份）打包成一個壓縮檔</span></div>
-      <a class="btn btn-rose" href="forms/women-reemployment-forms.zip" download>⬇️ 下載全部表單</a>
+    <div id="formArea" hidden>
+      <div class="tabs" id="formTabs">
+        <button type="button" class="on" data-f="all">全部</button>
+        <button type="button" data-f="blank">空白表單</button>
+        <button type="button" data-f="sample">填寫範本</button>
+      </div>
+      <div class="form-grid" id="formGrid"></div>
+      <div class="pack">
+        <div><b style="font-size:26px">📦 一次全部下載</b><br><span style="color:var(--muted)" id="packText"></span><br><a class="pack-all" href="forms/women-reemployment-forms.zip" download>三個地區全部一起下載</a></div>
+        <a class="btn btn-rose" id="packBtn" href="forms/women-reemployment-forms-nm.zip" download>⬇️ 下載這區全部表單</a>
+      </div>
     </div>
     <details class="cleanup">
       <summary>🧹 這些表格我們怎麼整理的？</summary>
       <ul>
-        <li>「自主訓練申請表」原本有 3 個版本，保留最新、最完整的版本（含出生日期西元年、繳交文件含無工作切結書、約 30 個工作天審查說明）。</li>
-        <li>「無工作切結書（115.06 版）」原本有 2 張完全相同，刪掉 1 張。</li>
-        <li>「領據／自主訓練」桃竹苗版與通用版內容相同，保留通用版（分署名稱自行填寫）；另保留「黏貼存摺版」。</li>
-        <li>原本橫式的「領據範本」已轉成直式。</li>
+        <li>主辦單位給的表格，北中南、高屏澎東、桃竹苗各有一套，所以我們分三區整理，選到哪一區就只顯示那一區的表格。</li>
+        <li>北中南與桃竹苗的「無工作切結書（115.06 版）」內容完全相同，兩區共用同一份。</li>
+        <li>高屏澎東用的是「切結書（115.08.12 版）」，領據是「黏貼存摺版」，請勿提供年金專戶。</li>
+        <li>桃竹苗的申請表有「出生日期（西元年）」，繳交文件含無工作切結書，審查約 30 個工作天；領據分署名稱已印好。</li>
+        <li>填寫範本目前只有北中南版；其他兩區的範本只供參考寫法，欄位請以你下載的表格為準。</li>
         <li>不同分署表格可能略有差異，送件前我們會再幫你確認最新版本。</li>
       </ul>
     </details>
@@ -839,30 +868,59 @@ document.querySelectorAll('.calc .toggle button').forEach(b=>b.onclick=()=>{docu
 document.getElementById('mRange').oninput=calc; calc();
 
 /* ===== Forms ===== */
+const REGIONS={
+  nm:{name:'北中南',sub:'北基宜花金馬、中彰投、雲嘉南分署'},
+  ks:{name:'高雄・屏東・澎湖・台東',sub:'高屏澎東分署'},
+  tcm:{name:'桃竹苗',sub:'桃竹苗分署'}
+};
+const regionOfBranch=n=>n==='桃竹苗分署'?'tcm':n==='高屏澎東分署'?'ks':'nm';
+/* r＝這份表適用哪些地區；ex＝範本與該地區表格完全一致（其餘只供參考） */
 const FORMS=[
-  {t:'blank',name:'自主訓練申請表',desc:'共 2 頁。報名最主要的一份表。',pdf:'blank-01-application.pdf',jpg:['blank-01-application-p1.jpg','blank-01-application-p2.jpg']},
-  {t:'sample',name:'自主訓練申請表・填寫範本',desc:'手寫範本（北中南適用），照著寫最快。',pdf:'sample-01-application.pdf',jpg:['sample-01-application-p1.jpg','sample-01-application-p2.jpg']},
-  {t:'blank',name:'無工作切結書（115.06 版）',desc:'證明自己目前沒有工作。',pdf:'blank-03-no-work-affidavit.pdf',jpg:['blank-03-no-work-affidavit.jpg']},
-  {t:'sample',name:'無工作切結書・填寫範本',desc:'簽名、身分證字號、地址、電話怎麼寫。',pdf:'sample-03-no-work-affidavit.pdf',jpg:['sample-03-no-work-affidavit.jpg']},
-  {t:'blank',name:'切結書（115.08.12 版）',desc:'同意查詢勞保資料、確認退出職場 180 天以上。',pdf:'blank-02-affidavit.pdf',jpg:['blank-02-affidavit.jpg']},
-  {t:'blank',name:'領據／自主訓練（填寫帳戶版）',desc:'領 2 萬、1 萬獎勵用。分署名稱與帳戶請自行填寫。',pdf:'blank-04-receipt-bank.pdf',jpg:['blank-04-receipt-bank.jpg']},
-  {t:'sample',name:'領據／自主訓練・填寫範本',desc:'郵局局號、帳號怎麼填（已轉成直式）。',pdf:'sample-04-receipt-bank.pdf',jpg:['sample-04-receipt-bank.jpg']},
-  {t:'blank',name:'領據／自主訓練（黏貼存摺版）',desc:'高屏澎東分署版本，黏貼存摺封面影本，請勿提供年金專戶。',pdf:'blank-05-receipt-passbook.pdf',jpg:['blank-05-receipt-passbook.jpg']},
+  {t:'blank',r:['nm'],name:'自主訓練申請表（北中南版）',desc:'共 2 頁。報名最主要的一份表。',pdf:'nm-application.pdf',jpg:['nm-application-p1.jpg','nm-application-p2.jpg']},
+  {t:'blank',r:['ks'],name:'自主訓練申請表（高屏澎東版）',desc:'共 2 頁。第 2 頁最下方要黏貼身分證正反面影本。',pdf:'ks-application.pdf',jpg:['ks-application-p1.jpg','ks-application-p2.jpg']},
+  {t:'blank',r:['tcm'],name:'自主訓練申請表（桃竹苗版）',desc:'共 2 頁。出生日期寫西元年；繳交文件含無工作切結書，審查約 30 個工作天。',pdf:'tcm-application.pdf',jpg:['tcm-application-p1.jpg','tcm-application-p2.jpg']},
+  {t:'sample',r:['nm','ks','tcm'],ex:['nm'],name:'自主訓練申請表・填寫範本',desc:'手寫範本（北中南版），照著寫最快。',pdf:'sample-01-application.pdf',jpg:['sample-01-application-p1.jpg','sample-01-application-p2.jpg']},
+  {t:'blank',r:['nm','tcm'],name:'無工作切結書（115.06 版）',desc:'證明自己目前沒有工作。北中南、桃竹苗共用同一份。',pdf:'shared-no-work-affidavit.pdf',jpg:['shared-no-work-affidavit.jpg']},
+  {t:'sample',r:['nm','tcm'],ex:['nm','tcm'],name:'無工作切結書・填寫範本',desc:'簽名、身分證字號、地址、電話怎麼寫。',pdf:'sample-03-no-work-affidavit.pdf',jpg:['sample-03-no-work-affidavit.jpg']},
+  {t:'blank',r:['ks'],name:'切結書（115.08.12 版）',desc:'同意查詢勞保資料、確認退出職場 180 天以上。',pdf:'ks-affidavit.pdf',jpg:['ks-affidavit.jpg']},
+  {t:'blank',r:['nm'],name:'領據／自主訓練（北中南版）',desc:'領 2 萬、1 萬獎勵用。分署名稱、金額與帳戶（銀行或郵局）自行填寫。',pdf:'nm-receipt.pdf',jpg:['nm-receipt.jpg']},
+  {t:'blank',r:['ks'],name:'領據／自主訓練（高屏澎東・黏貼存摺版）',desc:'分署名稱已印好，金額自行填寫，黏貼存摺封面影本，請勿提供年金專戶。',pdf:'ks-receipt.pdf',jpg:['ks-receipt.jpg']},
+  {t:'blank',r:['tcm'],name:'領據／自主訓練（桃竹苗版）',desc:'分署名稱已印好，金額自行填寫，存簿帳戶（銀行或郵局）二選一。',pdf:'tcm-receipt.pdf',jpg:['tcm-receipt.jpg']},
+  {t:'sample',r:['nm','ks','tcm'],ex:['nm'],name:'領據／自主訓練・填寫範本',desc:'郵局局號、帳號怎麼填（已轉成直式）。',pdf:'sample-04-receipt-bank.pdf',jpg:['sample-04-receipt-bank.jpg']},
 ];
-function drawForms(f){
+let region=null, ftype='all';
+function drawForms(){
   const g=document.getElementById('formGrid'); g.innerHTML='';
-  FORMS.filter(x=>f==='all'||x.t===f).forEach(x=>{
+  FORMS.filter(x=>x.r.includes(region)&&(ftype==='all'||x.t===ftype)).forEach(x=>{
+    const exact = x.t==='blank' || x.ex.includes(region);
     const d=document.createElement('div'); d.className='fcard';
     const th=x.jpg[0].replace('.jpg','-thumb.jpg');
-    d.innerHTML=`<div class="thumb" title="點我放大"><img src="forms/${th}" alt="${x.name}預覽"><span class="ribbon-s" style="${x.t==='blank'?'background:var(--navy);color:#fff':''}">${x.t==='blank'?'空白表單':'填寫範本'}</span></div>
-      <h4>${x.name}</h4><p>${x.desc}</p>
+    const ribbon = x.t==='blank' ? '空白表單' : (exact ? '填寫範本' : '範本・北中南版參考');
+    const desc = exact ? x.desc : x.desc+'這是北中南版範本，只供參考寫法，欄位以你下載的表格為準。';
+    d.innerHTML=`<div class="thumb" title="點我放大"><img src="forms/${th}" alt="${x.name}預覽"><span class="ribbon-s" style="${x.t==='blank'?'background:var(--navy);color:#fff':''}">${ribbon}</span></div>
+      <h4>${x.name}</h4><p>${desc}</p>
       <div class="acts"><a class="btn btn-rose" href="forms/${x.pdf}" download>⬇️ PDF</a><a class="btn btn-ghost" href="forms/${x.jpg[0]}" target="_blank" rel="noopener">🖼️ 圖檔</a></div>`;
     d.querySelector('.thumb').onclick=()=>openLB('forms/'+x.jpg[0]);
     g.appendChild(d);
   });
 }
-document.querySelectorAll('#formTabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#formTabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');drawForms(b.dataset.f);});
-drawForms('all');
+function setRegion(r,why){
+  region=r; const R=REGIONS[r];
+  document.querySelectorAll('#regionPick [data-r]').forEach(b=>{ const on=b.dataset.r===r; b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); });
+  document.getElementById('formArea').hidden=false;
+  document.getElementById('rpHint').innerHTML=(why?why+'，':'')+'已幫你選好：<b>'+R.name+'</b>（'+R.sub+'）。下面是這一區的表格。';
+  const ns=FORMS.filter(x=>x.t==='sample'&&x.r.includes(r)).length;
+  document.getElementById('packText').textContent=(3+ns)+' 份 PDF（'+R.name+'空白表單 3 份＋範本 '+ns+' 份）打包成一個壓縮檔';
+  document.getElementById('packBtn').href='forms/women-reemployment-forms-'+r+'.zip';
+  drawForms();
+}
+document.querySelectorAll('#regionPick [data-r]').forEach(b=>b.onclick=()=>{ document.getElementById('rpCounty').value=''; setRegion(b.dataset.r,''); });
+const rpCounty=document.getElementById('rpCounty');
+counties.forEach(c=>rpCounty.add(new Option(c,c)));
+const pickByCounty=c=>{ if(!c) return; rpCounty.value=c; setRegion(regionOfBranch(branchOf(c)),'你選了「'+c+'」'); };
+rpCounty.addEventListener('change',()=>pickByCounty(rpCounty.value));
+['county','fCounty'].forEach(id=>document.getElementById(id).addEventListener('change',e=>pickByCounty(e.target.value)));
+document.querySelectorAll('#formTabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#formTabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');ftype=b.dataset.f;drawForms();});
 function openLB(src){ document.getElementById('lbImg').src=src; document.getElementById('lb').classList.add('on'); }
 function closeLB(e,force){ if(force||e.target.id==='lb'){ document.getElementById('lb').classList.remove('on'); } }
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') document.getElementById('lb').classList.remove('on'); });
